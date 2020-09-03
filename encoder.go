@@ -43,15 +43,15 @@ func Compress(infile io.ReadSeeker, outfile io.ReadWriteSeeker, passwd string, c
 	encoder := NewEncoder(outfile)
 	smpSize := uint32(waveHdr.NumChannels * ((waveHdr.BitsPerSample + 7) / 8))
 	info := Info{
-		nch:     uint32(waveHdr.NumChannels),
-		bps:     uint32(waveHdr.BitsPerSample),
-		sps:     waveHdr.SampleRate,
-		format:  formatSimple,
-		samples: dataSize / smpSize,
+		Nch:     uint32(waveHdr.NumChannels),
+		Bps:     uint32(waveHdr.BitsPerSample),
+		Sps:     waveHdr.SampleRate,
+		Format:  formatSimple,
+		Samples: dataSize / smpSize,
 	}
 	if len(passwd) > 0 {
 		encoder.SetPassword(passwd)
-		info.format = formatEncrypted
+		info.Format = formatEncrypted
 	}
 	bufSize := pcmBufferLength * smpSize
 	buffer := make([]byte, bufSize)
@@ -257,19 +257,19 @@ func (e *Encoder) WriteHeader(info *Info) (size uint32, err error) {
 	if err = e.fifo.writeByte('1'); err != nil {
 		return
 	}
-	if err = e.fifo.writeUint16(uint16(info.format)); err != nil {
+	if err = e.fifo.writeUint16(uint16(info.Format)); err != nil {
 		return
 	}
-	if err = e.fifo.writeUint16(uint16(info.nch)); err != nil {
+	if err = e.fifo.writeUint16(uint16(info.Nch)); err != nil {
 		return
 	}
-	if err = e.fifo.writeUint16(uint16(info.bps)); err != nil {
+	if err = e.fifo.writeUint16(uint16(info.Bps)); err != nil {
 		return
 	}
-	if err = e.fifo.writeUint32(info.sps); err != nil {
+	if err = e.fifo.writeUint32(info.Sps); err != nil {
 		return
 	}
-	if err = e.fifo.writeUint32(info.samples); err != nil {
+	if err = e.fifo.writeUint32(info.Samples); err != nil {
 		return
 	}
 	if err = e.fifo.writeCrc32(); err != nil {
@@ -281,10 +281,10 @@ func (e *Encoder) WriteHeader(info *Info) (size uint32, err error) {
 }
 
 func (e *Encoder) SetInfo(info *Info) (err error) {
-	if info.format > 2 ||
-		info.bps < minBPS ||
-		info.bps > maxBPS ||
-		info.nch > maxNCH {
+	if info.Format > 2 ||
+		info.Bps < minBPS ||
+		info.Bps > maxBPS ||
+		info.Nch > maxNCH {
 		return errFormat
 	}
 	var p uint32
@@ -292,11 +292,11 @@ func (e *Encoder) SetInfo(info *Info) (err error) {
 		return
 	}
 	e.offset = uint64(p)
-	e.format = info.format
-	e.depth = (info.bps + 7) / 8
-	e.flenStd = (256 * (info.sps) / 245)
-	e.flenLast = info.samples % e.flenStd
-	e.frames = info.samples / e.flenStd
+	e.format = info.Format
+	e.depth = (info.Bps + 7) / 8
+	e.flenStd = (256 * (info.Sps) / 245)
+	e.flenLast = info.Samples % e.flenStd
+	e.frames = info.Samples / e.flenStd
 	if e.flenLast != 0 {
 		e.frames++
 	} else {
@@ -305,7 +305,7 @@ func (e *Encoder) SetInfo(info *Info) (err error) {
 	e.rate = 0
 	e.fifo.writeSkipBytes((e.frames + 1) * 4)
 	e.seekTable = make([]uint64, e.frames)
-	e.channels = int(info.nch)
+	e.channels = int(info.Nch)
 	e.shiftBits = (4 - e.depth) << 3
 	e.frameInit(0)
 	return

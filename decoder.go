@@ -37,9 +37,9 @@ func Decompress(infile io.ReadWriteSeeker, outfile io.WriteSeeker, passwd string
 	if err = decoder.GetInfo(&info, 0); err != nil {
 		return
 	}
-	smpSize := info.nch * ((info.bps + 7) / 8)
-	dataSize := info.samples * smpSize
-	waveHdr := wave.NewHeader(dataSize, uint16(info.nch), info.sps, uint16(info.bps), uint16(smpSize))
+	smpSize := info.Nch * ((info.Bps + 7) / 8)
+	dataSize := info.Samples * smpSize
+	waveHdr := wave.NewHeader(dataSize, uint16(info.Nch), info.Sps, uint16(info.Bps), uint16(smpSize))
 	if _, err = waveHdr.WriteTo(outfile); err != nil {
 		return
 	}
@@ -262,11 +262,11 @@ func (d *Decoder) ReadHeader(info *Info) (uint32, error) {
 		'1' != d.fifo.readByte() {
 		return 0, errFormat
 	}
-	info.format = uint32(d.fifo.readUint16())
-	info.nch = uint32(d.fifo.readUint16())
-	info.bps = uint32(d.fifo.readUint16())
-	info.sps = d.fifo.readUint32()
-	info.samples = d.fifo.readUint32()
+	info.Format = uint32(d.fifo.readUint16())
+	info.Nch = uint32(d.fifo.readUint16())
+	info.Bps = uint32(d.fifo.readUint16())
+	info.Sps = d.fifo.readUint32()
+	info.Samples = d.fifo.readUint32()
 	if !d.fifo.readCrc32() {
 		return 0, errFile
 	}
@@ -286,13 +286,13 @@ func (d *Decoder) GetInfo(info *Info, pos int64) (err error) {
 	if p, err = d.ReadHeader(info); err != nil {
 		return
 	}
-	if info.format > 2 ||
-		info.bps < minBPS ||
-		info.bps > maxBPS ||
-		info.nch > maxNCH {
+	if info.Format > 2 ||
+		info.Bps < minBPS ||
+		info.Bps > maxBPS ||
+		info.Nch > maxNCH {
 		return errFormat
 	}
-	if info.format == formatEncrypted {
+	if info.Format == formatEncrypted {
 		if !d.passwordSet {
 			return errPassword
 		}
@@ -302,11 +302,11 @@ func (d *Decoder) GetInfo(info *Info, pos int64) (err error) {
 		d.data = [8]byte{}
 	}
 	d.offset = uint64(pos) + uint64(p)
-	d.format = info.format
-	d.depth = (info.bps + 7) / 8
-	d.flenStd = (256 * (info.sps) / 245)
-	d.flenLast = info.samples % d.flenStd
-	d.frames = info.samples / d.flenStd
+	d.format = info.Format
+	d.depth = (info.Bps + 7) / 8
+	d.flenStd = (256 * (info.Sps) / 245)
+	d.flenLast = info.Samples % d.flenStd
+	d.frames = info.Samples / d.flenStd
 	if d.flenLast != 0 {
 		d.frames++
 	} else {
@@ -315,7 +315,7 @@ func (d *Decoder) GetInfo(info *Info, pos int64) (err error) {
 	d.rate = 0
 	d.seekTable = make([]uint64, d.frames)
 	d.seekAllowed = d.readSeekTable()
-	d.channels = int(info.nch)
+	d.channels = int(info.Nch)
 	d.frameInit(0, false)
 	return
 }

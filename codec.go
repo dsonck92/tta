@@ -5,11 +5,11 @@ import (
 )
 
 type Info struct {
-	format  uint32 // audio format
-	nch     uint32 // number of channels
-	bps     uint32 // bits per sample
-	sps     uint32 // samplerate (sps)
-	samples uint32 // data length in samples
+	Format  uint32 // audio format
+	Nch     uint32 // number of channels
+	Bps     uint32 // bits per sample
+	Sps     uint32 // samplerate (sps)
+	Samples uint32 // data length in samples
 }
 
 type adapter struct {
