@@ -5,8 +5,8 @@ import (
 	"io"
 	"os"
 
-	"github.com/zyxar/tta/filter"
-	"github.com/zyxar/tta/wave"
+	"github.com/dsonck92/tta/filter"
+	"github.com/dsonck92/tta/wave"
 )
 
 type Encoder struct {

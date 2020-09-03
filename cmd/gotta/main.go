@@ -8,7 +8,7 @@ import (
 	"runtime/pprof"
 	"time"
 
-	"github.com/zyxar/tta"
+	"github.com/dsonck92/tta"
 )
 
 var (

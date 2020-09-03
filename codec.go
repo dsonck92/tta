@@ -1,7 +1,7 @@
 package tta
 
 import (
-	"github.com/zyxar/tta/filter"
+	"github.com/dsonck92/tta/filter"
 )
 
 type Info struct {
