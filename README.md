@@ -1,7 +1,7 @@
 # tta
-[![Go Report Card](https://goreportcard.com/badge/github.com/zyxar/tta)](https://goreportcard.com/report/github.com/zyxar/tta)
-[![GoDoc](https://godoc.org/github.com/zyxar/tta?status.svg)](https://godoc.org/github.com/zyxar/tta)
-[![Build Status](https://travis-ci.org/zyxar/tta.svg?branch=master)](https://travis-ci.org/zyxar/tta)
+[![Go Report Card](https://goreportcard.com/badge/github.com/dsonck92/tta)](https://goreportcard.com/report/github.com/dsonck92/tta)
+[![GoDoc](https://godoc.org/github.com/dsonck92/tta?status.svg)](https://godoc.org/github.com/dsonck92/tta)
+[![Build Status](https://travis-ci.org/dsonck92/tta.svg?branch=master)](https://travis-ci.org/dsonck92/tta)
 
 [TTA Lossless Audio Codec](http://en.true-audio.com/TTA_Lossless_Audio_Codec_-_Realtime_Audio_Compressor) Encoder/Decoder for #golang
 
