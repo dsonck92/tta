@@ -29,7 +29,7 @@ type Decoder struct {
 }
 
 func Decompress(infile io.ReadWriteSeeker, outfile io.WriteSeeker, passwd string, cb Callback) (err error) {
-	decoder := NewDecoder(infile)
+	decoder := MakeDecoder(infile)
 	if len(passwd) > 0 {
 		decoder.SetPassword(passwd)
 	}
@@ -61,7 +61,7 @@ func Decompress(infile io.ReadWriteSeeker, outfile io.WriteSeeker, passwd string
 	return
 }
 
-func NewDecoder(iocb io.ReadWriteSeeker) *Decoder {
+func MakeDecoder(iocb io.ReadWriteSeeker) *Decoder {
 	dec := Decoder{}
 	dec.fifo.io = iocb
 	return &dec

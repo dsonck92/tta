@@ -40,7 +40,7 @@ func Compress(infile io.ReadSeeker, outfile io.ReadWriteSeeker, passwd string, c
 		err = errFormat
 		return
 	}
-	encoder := NewEncoder(outfile)
+	encoder := MakeEncoder(outfile)
 	smpSize := uint32(waveHdr.NumChannels * ((waveHdr.BitsPerSample + 7) / 8))
 	info := Info{
 		Nch:     uint32(waveHdr.NumChannels),
@@ -74,7 +74,7 @@ func Compress(infile io.ReadSeeker, outfile io.ReadWriteSeeker, passwd string, c
 	return
 }
 
-func NewEncoder(iocb io.ReadWriteSeeker) *Encoder {
+func MakeEncoder(iocb io.ReadWriteSeeker) *Encoder {
 	enc := Encoder{}
 	enc.fifo.io = iocb
 	return &enc
