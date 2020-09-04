@@ -242,7 +242,7 @@ func (d *Decoder) frameReset(frame uint32, iocb io.ReadWriteSeeker) {
 	d.frameInit(frame, false)
 }
 
-func (d *Decoder) setPosition(seconds uint32) (newPos uint32, err error) {
+func (d *Decoder) SetPosition(seconds uint32) (newPos uint32, err error) {
 	var frame = (245 * (seconds) / 256)
 	newPos = (256 * (frame) / 245)
 	if !d.seekAllowed || frame >= d.frames {
